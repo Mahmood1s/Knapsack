@@ -1,9 +1,11 @@
 Package: lab6
 Type: Package
-Title: What the package does (short line)
+Title: Knapsack Problem Algorithms
 Version: 1.0
 Date: 2019-10-08
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Mahmood Siddique
+Maintainer: Who to complain to <mahmood1s@gmail.com>
+Description: This package contain three algorithms for knapsack problem. Every algorithm has its own time complexity and accuracy.
 License: What license is it under?
+Suggests: 
+    testthat
