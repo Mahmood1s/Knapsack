@@ -1,0 +1,63 @@
+---
+title: "Knapsack Package"
+author: "Mahmood Siddique"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Knapsack Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## **What Package is Calculating**
+
+This package has a class which consist of three methods and one constructer. constructer/initialized method is generated a dataset for the class accounding the user requirement. and then user can call any function from knapsack_brute_force, dynamic_programming or greedy_heuristich.
+
+# **The function initialized**
+
+constructer/initialized method is generated a dataset for the class accounding the user requirement.
+
+# **The function knapsack_brute_force()**
+
+This method is solving knapsack problem by using set method.
+
+# **The function dynamic_programming()**
+
+This method is solving knapsack problem by using tabular method/ dynamic programming.  
+
+# **The function greedy_heuristich.()**
+
+This function is returning a vector of Residuals
+
+
+## knapsack_brute_force
+
+This is how function will called and output the results
+```{r}
+load("~/R Packages/lab6/vignettes/data.RData")
+obj <- knapsack_class$new()
+obj$knapsack_brute_force(obj$ks_dataset[1:8,],3500)
+```
+## dynamic_programming
+
+This is how function will called and output the results
+
+```{r}
+obj <- knapsack_class$new()
+obj$dynamic_programming(obj$ks_dataset[1:8,],3500)
+```
+
+## greedy_heuristich.
+
+This is how function will called and output the results
+```{r}
+
+```
+

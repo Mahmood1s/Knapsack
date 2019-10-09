@@ -6,6 +6,11 @@ Date: 2019-10-08
 Author: Mahmood Siddique
 Maintainer: Who to complain to <mahmood1s@gmail.com>
 Description: This package contain three algorithms for knapsack problem. Every algorithm has its own time complexity and accuracy.
-License: What license is it under?
+License: GPL-3
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
+RoxygenNote: 6.1.1
+Encoding: UTF-8
+VignetteBuilder: knitr

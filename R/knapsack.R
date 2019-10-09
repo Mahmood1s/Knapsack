@@ -5,7 +5,7 @@
 ##'
 ##'@author Mahmood Siddique
 ##'@rdname knapsack_class
-##' @describeIn This class will generate a dataset for knapsack in initialized function 
+##' @description  This class will generate a dataset for knapsack in initialized function 
 ##' @examples
 ##' \dontrun{
 ##'obj <- knapsack_class$new()
@@ -41,8 +41,6 @@
 ##'}
 ##'@references
 ##'\url{https://en.wikipedia.org/wiki/Knapsack_problem}
-##'@seealso
-##'\code{\link{Brute Force Knapsack}}
 ##'@export knapsack_class
 
 
