@@ -43,7 +43,7 @@ This is how function will called and output the results
 ```{r}
 load("~/R Packages/lab6/vignettes/data.RData")
 obj <- knapsack_class$new()
-obj$knapsack_brute_force(obj$ks_dataset[1:8,],3500)
+obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500)
 ```
 ## dynamic_programming
 

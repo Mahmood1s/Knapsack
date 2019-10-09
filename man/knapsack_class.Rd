@@ -34,9 +34,9 @@ This algorithm gives all possbile values with good accuracy, and also gives the 
 obj <- knapsack_class$new()
 }
 \dontrun{
-obj$knapsack_brute_force(obj$ks_dataset[1:8,],3500)
-obj$knapsack_brute_force(obj$ks_dataset[1:12,],3500)
-obj$knapsack_brute_force(obj$ks_dataset[1:8,],2000)
+obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500)
+obj$brute_force_knapsack(obj$ks_dataset[1:12,],3500)
+obj$brute_force_knapsack(obj$ks_dataset[1:8,],2000)
 }
 \dontrun{
 obj$dynamic_programming(obj$ks_dataset[1:8,],3500)

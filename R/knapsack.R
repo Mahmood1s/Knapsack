@@ -17,9 +17,9 @@
 ##'@return  This function will return a list of selected elements and their total values
 ##'@examples
 ##'\dontrun{
-##'obj$knapsack_brute_force(obj$ks_dataset[1:8,],3500)
-##'obj$knapsack_brute_force(obj$ks_dataset[1:12,],3500)
-##'obj$knapsack_brute_force(obj$ks_dataset[1:8,],2000)
+##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500)
+##'obj$brute_force_knapsack(obj$ks_dataset[1:12,],3500)
+##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],2000)
 ##'}
 ##'@rdname dynamic_programming
 ##'@details This algorithm gives all possbile values with good accuracy, and also gives the maximum value for the knapsack
@@ -65,9 +65,15 @@
                                   
                                 },
                                 
-                                knapsack_brute_force = function(ks_df,ks_size){
+                                brute_force_knapsack = function(ks_df,ks_size){
                                  
-                                  i <- 1
+                                  names(ks_df) <-c("W","V")   
+                                  all_w_positive <- sum(ks_df$W>0)
+                                  all_v_positive <- sum(ks_df$V>0)
+                                  total_length <- nrow(ks_df)
+                                  stopifnot(is.data.frame(ks_df) & all_v_positive == total_length & all_w_positive == total_length,is.numeric(ks_size),ks_size>0)
+                                  
+                                  i <- 2
                                   total_value <- 0     
                                   item_included <- NULL
                                   weights<- NULL
@@ -96,7 +102,7 @@
                                       }
                                   }
                                   
-                                  return(list(value=total_value,elements=item_included))
+                                  return(list(value=round(total_value),elements=item_included))
                                 },
                                 
                                 dynamic_programming = function(ks_df,ks_size){
@@ -168,7 +174,7 @@
                                   #print(paste("Total weight : ",total_weight))
                                   #print(paste("Total Value : ",total_value))
                                   #print(item_included)
-                                  result <- list(value = total_value,element = sort(item_included))#, weight = total_weight)
+                                  result <- list(value = round(total_value),element = sort(item_included))#, weight = total_weight)
                                   return(result)
                                 },
                                 
