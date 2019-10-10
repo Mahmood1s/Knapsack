@@ -21,23 +21,23 @@
 ##'obj$brute_force_knapsack(obj$ks_dataset[1:12,],3500)
 ##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],2000)
 ##'}
-##'@rdname dynamic_programming
+##'@rdname knapsack_dynamic
 ##'@details This algorithm gives all possbile values with good accuracy, and also gives the maximum value for the knapsack
 ##'@return  This function will return a list of selected elements and their total values
 ##'@examples
 ##'\dontrun{
-##'obj$dynamic_programming(obj$ks_dataset[1:8,],3500)
-##'obj$dynamic_programming(obj$ks_dataset[1:12,],3500)
-##'obj$dynamic_programming(obj$ks_dataset[1:8,],2000)
+##'obj$knapsack_dynamic(obj$ks_dataset[1:8,],3500)
+##'obj$knapsack_dynamic(obj$ks_dataset[1:12,],3500)
+##'obj$knapsack_dynamic(obj$ks_dataset[1:8,],2000)
 ##'}
-##'@rdname greedy_heuristich
+##'@rdname greedy_knapsack
 ##'@details This algorithm gives all possbile values with good accuracy, and also gives the maximum value for the knapsack
 ##'@return  This function will return a list of selected elements and their total values
 ##'@examples
 ##'\dontrun{
-##'obj$greedy_heuristich(obj$ks_dataset[1:8,],3500)
-##'obj$greedy_heuristich(obj$ks_dataset[1:12,],3500)
-##'obj$greedy_heuristich(obj$ks_dataset[1:8,],2000)
+##'obj$greedy_knapsack(obj$ks_dataset[1:8,],3500)
+##'obj$greedy_knapsack(obj$ks_dataset[1:12,],3500)
+##'obj$greedy_knapsack(obj$ks_dataset[1:8,],2000)
 ##'}
 ##'@references
 ##'\url{https://en.wikipedia.org/wiki/Knapsack_problem}
@@ -45,23 +45,22 @@
 
 
  knapsack_class <- setRefClass("knapsack_class", fields = list(ks_dataset = "data.frame"),
-#                                                               n_items = "numeric",
-#                                                               ks_size = "numeric",
-#                                                               temp_df = "data.frame"),
+                                                              
                               methods = list(
                                 
                                 initialize = function(){
-
+              
+                                  RNGkind(sample.kind = "Rounding")
                                   set.seed(42)
                                   n_items <- 2000
                                   ks_dataset <<-data.frame(
-                                    w <-sample(1:4000, size = n_items, replace = TRUE),
-                                    v <- runif(n = n_items, 0, 10000))
+                                    w =sample(1:4000, size = n_items, replace = TRUE),
+                                    v = runif(n = n_items, 0, 10000))
                                   
                                   # ks_dataset <<-data.frame(
-                                  #   w <-sample(1:10, size = n_items, replace = TRUE),
-                                  #   v <- runif(n = n_items, 0, 10))
-                                  #ks_dataset <<- data.frame(W = c(2,3,4,5),V=c(1,2,5,6))
+                                  #   w <-sample(1:10, size = 4, replace = TRUE),
+                                  #   v <- runif(n = 4, 0, 10))
+                                  #ks_dataset <<- data.frame(w = c(2,3,4,5),v=c(1,2,5,6))
                                   
                                 },
                                 
@@ -105,7 +104,7 @@
                                   return(list(value=round(total_value),elements=item_included))
                                 },
                                 
-                                dynamic_programming = function(ks_df,ks_size){
+                                knapsack_dynamic = function(ks_df,ks_size){
                                   #print(ks_df)
                                   names(ks_df) <-c("W","V")   
                                   all_w_positive <- sum(ks_df$W>0)
@@ -178,7 +177,88 @@
                                   return(result)
                                 },
                                 
-                                greedy_heuristich = function(){
+                                greedy_knapsack = function(ks_df,ks_size){
+                                  # stopifnot(is.data.frame(x),is.numeric(W))
+                                  # 
+                                  # 
+                                  # x$rows_idx <- row(x)
+                                  # x <- x[x$w < W,]
+                                  # x$vw_ratio <- x$v/x$w
+                                  # dsc_ordr <- order(x$vw_ratio, decreasing = TRUE)
+                                  # x <- x[dsc_ordr,]
+                                  # 
+                                  # rslt <- list(value = 0)
+                                  # curr_weight <- 0
+                                  # 
+                                  # i <- 1
+                                  # 
+                                  # repeat{
+                                  #   if(curr_weight <= W){
+                                  #     curr_weight <- curr_weight + x$w[i]
+                                  #     
+                                  #     rslt$value <- rslt$value + x$v[i]
+                                  #     rslt$elements[i] <- x$row[i]
+                                  #     
+                                  #     i <- i + 1
+                                  #     if(i>nrow(x) | curr_weight+x$w[i]>W){
+                                  #       break()
+                                  #     }
+                                  #   } 
+                                  # }
+                                  # 
+                                  # rslt$value <- round(rslt$value,0)
+                                  # return(rslt)
+                                  
+                                  names(ks_df) <-c("W","V")   
+                                  all_w_positive <- sum(ks_df$W>0)
+                                  all_v_positive <- sum(ks_df$V>0)
+                                  total_length <- nrow(ks_df)
+                                  stopifnot(is.data.frame(ks_df) & all_v_positive == total_length & all_w_positive == total_length,is.numeric(ks_size),ks_size>0)
+                                  
+                                  temp_df <- ks_df
+                                  temp_vw <- NULL
+                                  index_vector <- NULL
+                                  store_index <- NULL
+                                  temp_x <- NULL
+                                  temp_weight <- ks_size
+
+                                  for(i in 1:nrow(ks_df))
+                                  {
+                                    temp_vw[i] <- ks_df[i,2]/ks_df[i,1]
+                                    index_vector[i] <- 0
+                                    store_index[i] <- i
+                                  }
+
+                                  temp_df <- cbind(temp_df,temp_vw,store_index)
+                                  #temp_vw <- sort(temp_vw,decreasing = TRUE)
+                                  temp_df <- temp_df[order(temp_vw,decreasing = TRUE),]
+                                  print(temp_df)
+                                  for(i in 1:length(temp_vw))
+                                  {
+                                    #df_index <- which(temp_df[,3] == temp_vw[i])
+
+
+                                    if(temp_weight >= temp_df[i,1])
+                                    {
+                                      index_vector[i] <- 1
+                                      temp_weight <- temp_weight - temp_df[i,1]
+                                    }
+                                     else
+                                     {
+                                    #   index_vector[df_index] <- temp_weight / temp_df[df_index,1]
+                                     #  temp_weight <- 0
+                                    #   break
+                                     }
+                                  }
+                                  temp_df <- cbind(temp_df,index_vector)
+                                  print(temp_df)
+                                  selected_elements <-NULL
+                                  total_value <- 0
+
+                                  selected_elements <- temp_df[which(temp_df[,5] == 1),4]
+                                  total_value <- sum(ks_df$V[selected_elements])
+
+                                  return(list(Value = total_value,elements = selected_elements))
                                   
                                 }
                               

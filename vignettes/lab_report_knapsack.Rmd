@@ -24,15 +24,15 @@ This package has a class which consist of three methods and one constructer. con
 
 constructer/initialized method is generated a dataset for the class accounding the user requirement.
 
-# **The function knapsack_brute_force()**
+# **The function brute_force_knapsack()**
 
 This method is solving knapsack problem by using set method.
 
-# **The function dynamic_programming()**
+# **The function knapsack_dynamic()**
 
 This method is solving knapsack problem by using tabular method/ dynamic programming.  
 
-# **The function greedy_heuristich.()**
+# **The function greedy_knapsack()**
 
 This function is returning a vector of Residuals
 
@@ -45,19 +45,31 @@ load("~/R Packages/lab6/vignettes/data.RData")
 obj <- knapsack_class$new()
 obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500)
 ```
-## dynamic_programming
+## knapsack brute force Question
+  How much time does it takes to run the algorithm for n = 16 objects?
+  
+  Answer : it will take 2^16 = 65536  time
+
+## knapsack_dynamic
 
 This is how function will called and output the results
 
 ```{r}
 obj <- knapsack_class$new()
-obj$dynamic_programming(obj$ks_dataset[1:8,],3500)
+obj$knapsack_dynamic(obj$ks_dataset[1:8,],3500)
 ```
 
-## greedy_heuristich.
+## knapsack dynamic Question
+  How much time does it takes to run the algorithm for n = 500 objects?
+  Answer : it will take n X W time, if W =3500 then it will be 500 X 3500 = 1750000
+
+## greedy_knapsack
 
 This is how function will called and output the results
 ```{r}
 
 ```
 
+## greedy knapsack Question
+  How much time does it takes to run the algorithm for n = 1000000 objects?
+  Answer  : it will take 6000000 time which is nlogn times
