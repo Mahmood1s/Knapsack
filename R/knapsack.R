@@ -178,37 +178,7 @@
                                 },
                                 
                                 greedy_knapsack = function(ks_df,ks_size){
-                                  # stopifnot(is.data.frame(x),is.numeric(W))
-                                  # 
-                                  # 
-                                  # x$rows_idx <- row(x)
-                                  # x <- x[x$w < W,]
-                                  # x$vw_ratio <- x$v/x$w
-                                  # dsc_ordr <- order(x$vw_ratio, decreasing = TRUE)
-                                  # x <- x[dsc_ordr,]
-                                  # 
-                                  # rslt <- list(value = 0)
-                                  # curr_weight <- 0
-                                  # 
-                                  # i <- 1
-                                  # 
-                                  # repeat{
-                                  #   if(curr_weight <= W){
-                                  #     curr_weight <- curr_weight + x$w[i]
-                                  #     
-                                  #     rslt$value <- rslt$value + x$v[i]
-                                  #     rslt$elements[i] <- x$row[i]
-                                  #     
-                                  #     i <- i + 1
-                                  #     if(i>nrow(x) | curr_weight+x$w[i]>W){
-                                  #       break()
-                                  #     }
-                                  #   } 
-                                  # }
-                                  # 
-                                  # rslt$value <- round(rslt$value,0)
-                                  # return(rslt)
-                                  
+                                
                                   names(ks_df) <-c("W","V")   
                                   all_w_positive <- sum(ks_df$W>0)
                                   all_v_positive <- sum(ks_df$V>0)
@@ -230,32 +200,23 @@
                                   }
 
                                   temp_df <- cbind(temp_df,temp_vw,store_index)
-                                  #temp_vw <- sort(temp_vw,decreasing = TRUE)
                                   temp_df <- temp_df[order(temp_vw,decreasing = TRUE),]
-                                  print(temp_df)
+                                  selected_elements <-NULL
+                                  temp_var <- 1
+                                  
                                   for(i in 1:length(temp_vw))
                                   {
-                                    #df_index <- which(temp_df[,3] == temp_vw[i])
-
-
                                     if(temp_weight >= temp_df[i,1])
                                     {
                                       index_vector[i] <- 1
                                       temp_weight <- temp_weight - temp_df[i,1]
+                                      selected_elements[temp_var] <- temp_df[i,4]
+                                      temp_var <- temp_var + 1
                                     }
-                                     else
-                                     {
-                                    #   index_vector[df_index] <- temp_weight / temp_df[df_index,1]
-                                     #  temp_weight <- 0
-                                    #   break
-                                     }
                                   }
+                                  temp_var <- 0
                                   temp_df <- cbind(temp_df,index_vector)
-                                  print(temp_df)
-                                  selected_elements <-NULL
-                                  total_value <- 0
-
-                                  selected_elements <- temp_df[which(temp_df[,5] == 1),4]
+                                  
                                   total_value <- sum(ks_df$V[selected_elements])
 
                                   return(list(Value = total_value,elements = selected_elements))
