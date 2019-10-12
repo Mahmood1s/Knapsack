@@ -1,4 +1,4 @@
-##'Bruteforce, dynamimc programminf and greedy algorithm for the knapsack problem
+##'Bruteforce, dynamimc programming and greedy algorithm for the knapsack problem
 ##'
 ##'@name knapsack_class
 ##'@title Knapsack Algorithms
@@ -19,7 +19,7 @@
 ##'\dontrun{
 ##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500)
 ##'obj$brute_force_knapsack(obj$ks_dataset[1:12,],3500)
-##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],2000)
+##'obj$brute_force_knapsack(obj$ks_dataset[1:8,],3500,Paral = TRUE)
 ##'}
 ##'@rdname knapsack_dynamic
 ##'@details This algorithm gives all possbile values with good accuracy, and also gives the maximum value for the knapsack
@@ -42,10 +42,11 @@
 ##'@references
 ##'\url{https://en.wikipedia.org/wiki/Knapsack_problem}
 ##'@export knapsack_class
+##'@import devtools
 ##'@import RcppAlgos
 
 
-#devtools::install_github("hadley/lineprof")
+devtools::install_github("hadley/lineprof")
 
  knapsack_class <- setRefClass("knapsack_class", fields = list(ks_dataset = "data.frame"),
                                                               

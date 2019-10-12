@@ -20,28 +20,40 @@ knitr::opts_chunk$set(
 
 This package has a class which consist of three methods and one constructer. constructer/initialized method is generated a dataset for the class accounding the user requirement. and then user can call any function from knapsack_brute_force, dynamic_programming or greedy_heuristich.
 
-# **The function initialized**
+# ** Function initialized**
 
 constructer/initialized method is generated a dataset for the class accounding the user requirement.
 
-# **The function brute_force_knapsack()**
+# ** Function brute_force_knapsack()**
 
-This method is solving knapsack problem by using set method.
+This method is solving knapsack problem by using set method. there is an optional parameter parallel (Paral) which is by default FALSE and if you pass the value TRUE to this parameter it calculations the combiinations in parallel manner and performance increases exponentially.
 
-# **The function knapsack_dynamic()**
+# ** Function knapsack_brutefore_profiling() **
 
-This method is solving knapsack problem by using tabular method/ dynamic programming.  
+this mathod is profilling the code written in brute_force_knapsack mathod.
 
-# **The function greedy_knapsack()**
+# ** Function knapsack_dynamic()**
+
+This method is solving knapsack problem by using tabular method/ dynamic programming.
+
+# ** Function knapsack_dynamic_profiling() **
+
+this mathod is profilling the code written in knapsack_dynamic mathod.
+
+# ** Function greedy_knapsack()**
 
 This function is returning a vector of Residuals
 
+# ** Function knapsack_greedy_profiling() **
+
+this mathod is profilling the code written in greedy_knapsack mathod.
 
 ## knapsack_brute_force
 
 This is how function will called and output the results
 ```{r}
 load("~/R Packages/lab6/vignettes/data.RData")
+devtools::install_github("hadley/lineprof")
 obj <- knapsack_class$new()
 obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500)
 system.time(obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500))
@@ -60,6 +72,16 @@ obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500,Paral = TRUE)
 system.time(obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500,Paral = TRUE))
 obj$knapsack_brutefore_profiling(obj$ks_dataset[1:16,],3500,para = TRUE)
 ```
+
+## knapsack_brute_force performance after optimization
+
+  What performance gain could you get by trying to improving your code?
+  Answer =  we have got around 15 percent better performance after optimizing the code.we have filtered the comibations those have comulative sum greater than W. 
+  
+## knapsack_brute_force performance gain after parallelization
+
+  What performance gain could you get by parallelizing brute force search?
+  Answer = we have got around 80 percent better performance after parallizing the code of computing the combinations in parallel
 
 ## knapsack_dynamic
 
