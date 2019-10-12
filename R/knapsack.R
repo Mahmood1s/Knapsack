@@ -42,7 +42,10 @@
 ##'@references
 ##'\url{https://en.wikipedia.org/wiki/Knapsack_problem}
 ##'@export knapsack_class
+##'@import RcppAlgos
 
+
+#devtools::install_github("hadley/lineprof")
 
  knapsack_class <- setRefClass("knapsack_class", fields = list(ks_dataset = "data.frame"),
                                                               
@@ -50,7 +53,7 @@
                                 
                                 initialize = function(){
               
-                                  RNGkind(sample.kind = "Rounding")
+                                  suppressWarnings(RNGkind(sample.kind = "Rounding"))
                                   set.seed(42)
                                   n_items <- 2000
                                   ks_dataset <<-data.frame(
@@ -64,7 +67,7 @@
                                   
                                 },
                                 
-                                brute_force_knapsack = function(ks_df,ks_size){
+                                brute_force_knapsack = function(ks_df,ks_size,Paral =FALSE){
                                  
                                   names(ks_df) <-c("W","V")   
                                   all_w_positive <- sum(ks_df$W>0)
@@ -80,11 +83,23 @@
                                   
                                   for (i in 1:nrow(ks_df))
                                   {
-                                    w_combination <- as.data.frame(combn(ks_df[,1], i))
-                                    v_combination <- as.data.frame(combn(ks_df[,2], i))
+                                    if(Paral == FALSE)
+                                    {
+                                      w_combination <- as.data.frame(combn(ks_df[,1], i))
+                                      v_combination <- as.data.frame(combn(ks_df[,2], i))
+                                    }
+                                    else
+                                    {
+                                      w_combination <- as.data.frame(RcppAlgos::comboGeneral(ks_df[,1],i,Parallel = TRUE,nThreads = 8))#,constraintFun = "sum",comparisonFun = c("<="),limitConstraints = ks_size))
+                                      w_combination <- t(w_combination)
+                                      v_combination <- as.data.frame(RcppAlgos::comboGeneral(ks_df[,2],i,Parallel = TRUE,nThreads = 8))#,constraintFun = "sum",comparisonFun = c("<="),limitConstraints = ks_size))
+                                      v_combination <- t(v_combination)
+                                    }
                                     w_vector <- colSums(w_combination)
                                     v_vector <- colSums(v_combination)
                                     weights_index <- which(w_vector<=ks_size)
+                                    val_weight <- NULL
+
                                     
                                     if(length(weights_index) != 0)
                                       { 
@@ -105,7 +120,7 @@
                                 },
                                 
                                 knapsack_dynamic = function(ks_df,ks_size){
-                                  #print(ks_df)
+                                
                                   names(ks_df) <-c("W","V")   
                                   all_w_positive <- sum(ks_df$W>0)
                                   all_v_positive <- sum(ks_df$V>0)
@@ -118,17 +133,18 @@
                                   ks_size <- ks_size+1
                                   
                                   # Creating Matrix of size W x elements
-                                  temp_df1=c()
-                                  for (i in 1:(ks_size*n_items)) 
-                                    temp_df1[i] = 1
-                                  dim(temp_df1) = c(n_items,ks_size)
-                                  temp_df <- as.data.frame(temp_df1)
+                                  # temp_df1=c()
+                                  # for (i in 1:(ks_size*n_items)) 
+                                  #   temp_df1[i] = 1
+                                  # dim(temp_df1) = c(n_items,ks_size)
+                                  # temp_df <- as.data.frame(temp_df1)
+                                  
+                                  temp_df <- as.data.frame(matrix(1,nrow = n_items,ncol = ks_size))
+                                  
                                   
                                   # calculating knapsack matrix
                                   for (i in 1:(n_items)) {
                                     for (j in 1:ks_size) {
-                                      # print(paste("Row Number ",i,"\n column number ",j))
-                                      
                                       if(i==1 | j ==1)
                                         temp_df[i,j] <- 0
                                       else if(ks_df[i,1] < j)
@@ -156,24 +172,18 @@
                                   {
                                     if(temp_df[i,j] == temp_df[i-1,j])
                                     {
-                                      #   print(paste(temp_df[i,j]," : ",temp_df[i-1,j]))
                                       i <- i-1
                                     }
                                     else
                                     {
-                                      #print(paste("included : ",i-1,", with value ",ks_df[i,2]))
                                       item_included[k] <- i-1
                                       k<-k+1
                                       total_value <- total_value + ks_df[i,2]
-                                      #total_weight <-total_weight+ks_df[i,1]
                                       j <- j-ks_df[i,1]
                                       i <- i-1
                                     }
                                   }
-                                  #print(paste("Total weight : ",total_weight))
-                                  #print(paste("Total Value : ",total_value))
-                                  #print(item_included)
-                                  result <- list(value = round(total_value),element = sort(item_included))#, weight = total_weight)
+                                  result <- list(value = round(total_value),elements = sort(item_included))#, weight = total_weight)
                                   return(result)
                                 },
                                 
@@ -219,8 +229,27 @@
                                   
                                   total_value <- sum(ks_df$V[selected_elements])
 
-                                  return(list(Value = total_value,elements = selected_elements))
+                                  return(list(value = total_value,elements = selected_elements))
                                   
+                                },
+                                
+                                knapsack_brutefore_profiling = function(ks_df,ks_size,para = FALSE)
+                                 {
+                                  if(para == FALSE)
+                                   bfp <- lineprof::lineprof(brute_force_knapsack(ks_df,ks_size))
+                                  else
+                                    bfp <- lineprof::lineprof(brute_force_knapsack(ks_df,ks_size,Paral = TRUE))
+                                    bfp
+                                   },
+                                knapsack_dynamic_profiling = function(ks_df,ks_size)
+                                {
+                                    dpp <- lineprof::lineprof(knapsack_dynamic(ks_df,ks_size))
+                                  dpp
+                                },
+                                knapsack_greedy_profiling = function(ks_df,ks_size)
+                                {
+                                   ghp <- lineprof::lineprof(greedy_knapsack(ks_df,ks_size))
+                                 ghp
                                 }
                               
                                 ))
