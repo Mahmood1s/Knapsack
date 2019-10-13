@@ -52,7 +52,7 @@ this mathod is profilling the code written in greedy_knapsack mathod.
 
 This is how function will called and output the results
 ```{r}
-load("~/R Packages/lab6/vignettes/data.RData")
+devtools::load_all()
 obj <- knapsack_class$new()
 obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500)
 system.time(obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500))
