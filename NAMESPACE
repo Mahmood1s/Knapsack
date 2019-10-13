@@ -3,3 +3,4 @@
 export(knapsack_class)
 import(RcppAlgos)
 import(devtools)
+import(profvis)

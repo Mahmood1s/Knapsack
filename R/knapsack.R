@@ -44,9 +44,8 @@
 ##'@export knapsack_class
 ##'@import devtools
 ##'@import RcppAlgos
+##'@import profvis
 
-
-devtools::install_github("hadley/lineprof")
 
  knapsack_class <- setRefClass("knapsack_class", fields = list(ks_dataset = "data.frame"),
                                                               
@@ -236,20 +235,21 @@ devtools::install_github("hadley/lineprof")
                                 
                                 knapsack_brutefore_profiling = function(ks_df,ks_size,para = FALSE)
                                  {
-                                  if(para == FALSE)
-                                   bfp <- lineprof::lineprof(brute_force_knapsack(ks_df,ks_size))
+                                   if(para == FALSE)
+                                   bfp <- profvis::profvis(brute_force_knapsack(ks_df,ks_size))
                                   else
-                                    bfp <- lineprof::lineprof(brute_force_knapsack(ks_df,ks_size,Paral = TRUE))
+                                    bfp <- profvis::profvis(brute_force_knapsack(ks_df,ks_size,Paral = TRUE))
+                                  
                                     bfp
                                    },
                                 knapsack_dynamic_profiling = function(ks_df,ks_size)
                                 {
-                                    dpp <- lineprof::lineprof(knapsack_dynamic(ks_df,ks_size))
+                                    dpp <- profvis::profvis(knapsack_dynamic(ks_df,ks_size))
                                   dpp
                                 },
                                 knapsack_greedy_profiling = function(ks_df,ks_size)
                                 {
-                                   ghp <- lineprof::lineprof(greedy_knapsack(ks_df,ks_size))
+                                   ghp <- profvis::profvis(greedy_knapsack(ks_df,ks_size))
                                  ghp
                                 }
                               

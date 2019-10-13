@@ -13,6 +13,6 @@ Suggests:
     knitr,
     rmarkdown
 RoxygenNote: 6.1.1
-Imports: devtools, RcppAlgos
+Imports: devtools, RcppAlgos, profvis
 Encoding: UTF-8
 VignetteBuilder: knitr

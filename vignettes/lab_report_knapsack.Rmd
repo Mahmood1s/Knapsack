@@ -53,7 +53,6 @@ this mathod is profilling the code written in greedy_knapsack mathod.
 This is how function will called and output the results
 ```{r}
 load("~/R Packages/lab6/vignettes/data.RData")
-devtools::install_github("https://github.com/hadley/lineprof" , upgrade = "always",force = TRUE)
 obj <- knapsack_class$new()
 obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500)
 system.time(obj$brute_force_knapsack(obj$ks_dataset[1:16,],3500))
@@ -103,7 +102,7 @@ This is how function will called and output the results
 ```{r}
 obj$greedy_knapsack(obj$ks_dataset[1:8,],3500)
 system.time(obj$greedy_knapsack(obj$ks_dataset[1:8,],3500))
-obj$knapsack_greedy_profiling(obj$greedy_knapsack(obj$ks_dataset[1:8,],3500))
+obj$knapsack_greedy_profiling(obj$greedy_knapsack(obj$ks_dataset[1:800,],3500))
 ```
 
 ## greedy knapsack Question
